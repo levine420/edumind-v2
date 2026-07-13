@@ -1,17 +1,11 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { useSession, signOut } from "next-auth/react";
-import { Loader2, LogOut, CheckCircle2, Upload } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { Loader2, Upload, CheckCircle2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-
-
-interface DocumentItem {
-  id: string;
-  fileName: string;
-  fileSize: number;
-  uploadedAt: string;
-}
+import Sidebar from "@/components/dashboard/Sidebar"; 
+import { DocumentItem } from "@/app/dashboard/types"; 
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
@@ -72,9 +66,6 @@ export default function DashboardPage() {
     }
   };
 
-
-
-
   useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/login");
@@ -86,7 +77,7 @@ export default function DashboardPage() {
 
   if (status === "loading") {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-dark-bg flex items-center justify-center">
         <Loader2 size={40} className="text-white animate-spin" />
       </div>
     );
@@ -97,28 +88,8 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-900 text-white">
-      <aside className="w-64 bg-gray-800 p-6 flex flex-col">
-        <h1 className="text-2xl font-bold mb-8">EduMind v2</h1>
-        <nav className="flex-grow">
-          {/* Navigation will be added here */}
-        </nav>
-        <div className="mt-auto">
-          {session?.user && (
-            <div className="mb-4">
-              <p className="text-sm">Signed in as</p>
-              <p className="font-bold">{session.user.name}</p>
-            </div>
-          )}
-          <button 
-            onClick={() => signOut({ callbackUrl: '/' })}
-            className="w-full flex items-center justify-center p-2 rounded-lg bg-red-600 hover:bg-red-700 text-white"
-          >
-            <LogOut size={20} />
-            <span className="ml-2">Sign Out</span>
-          </button>
-        </div>
-      </aside>
+    <div className="flex min-h-screen bg-dark-bg text-white">
+      <Sidebar /> 
       <main className="flex-1 p-8">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-3xl font-bold">My Documents</h2>
@@ -170,3 +141,4 @@ export default function DashboardPage() {
     </div>
   );
 }
+
